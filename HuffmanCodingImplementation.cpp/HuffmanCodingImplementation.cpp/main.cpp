@@ -2,6 +2,7 @@
 #include <queue>
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
@@ -18,9 +19,9 @@ public:
     {
         this -> data = data;
         this -> freq = freq;
-        left = right = NULL;
+        this -> left = this -> right = NULL;
     }
-    
+
 };
 
 class myComparator
@@ -56,32 +57,38 @@ minHeapNode * buildHuffmanTree(char characters[], int frequency[], int size)
     return minHeap.top();
 }
 
-void printCodes(minHeapNode * root, string code)
+void getCodes(minHeapNode * root, string code, vector<pair<char, string>> * codes)
 {
     if(!root)
     {
         return;
     }
-    
     if (root -> data != '$')
     {
-        cout << root -> data << " : " << code << endl;
+        codes -> push_back(make_pair(root -> data, code));
+        //        cout << root -> data << " : " << code << endl;
     }
+    getCodes(root -> left, code + '0', codes);
+    getCodes(root -> right, code + '1', codes);
+   
     
-    printCodes(root -> left, code + '0');
-    printCodes(root -> right, code + '1');
 }
 
 
 
 int main()
 {
-    char characters[] = { 'a', 'b', 'c', 'd', 'e', 'f' };
+    char characters[] = {'a', 'b', 'c', 'd', 'e', 'f'};
     int frequency[] = { 5, 9, 12, 13, 16, 45 };
     
     int size = sizeof(characters) / sizeof(characters[0]);
     
-   
+
     minHeapNode * root = buildHuffmanTree(characters, frequency, size);
-    printCodes(root, "");
+    vector<pair<char, string>> * codes = new vector<pair<char, string>>;
+    getCodes(root, "", codes);
+    for (auto v : *codes)
+    {
+        cout << v.first << " : " << v.second << endl;
+    }
 }
