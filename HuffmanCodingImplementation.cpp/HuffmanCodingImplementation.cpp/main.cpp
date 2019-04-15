@@ -74,10 +74,9 @@ string decode_file(minHeapNode * root, string code)
     for (int i = 0; i < code.size(); i++)
     {
         if (code[i] == '0')
-        {
             curr = curr -> left;
-        }
-        else curr = curr -> right;
+        else 
+            curr = curr -> right;
         if (!curr -> left && !curr -> right)
         {
             ans += curr -> data;
