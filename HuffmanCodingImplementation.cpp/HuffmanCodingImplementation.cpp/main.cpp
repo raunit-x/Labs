@@ -16,13 +16,7 @@ public:
     int freq;
     minHeapNode * left;
     minHeapNode * right;
-    minHeapNode(char data, int freq)
-    {
-        this -> data = data;
-        this -> freq = freq;
-        this -> left = this -> right = NULL;
-    }
-    
+    minHeapNode(char data, int freq) : data(data), freq(freq), left(NULL), right(NULL){} 
 };
 
 class myComparator
@@ -106,7 +100,7 @@ int main()
         }
         else file[text[i]]++;
     }
-    for(auto it : file)
+    for(auto & it : file)
     {
         cout << it.first << ": " << it.second << endl;
     }
