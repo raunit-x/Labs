@@ -2,7 +2,8 @@
 #include <queue>
 #include <vector>
 #include <string>
-#include <unordered_map>
+#include <map>
+#include <fstream>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ public:
         this -> freq = freq;
         this -> left = this -> right = NULL;
     }
-
+    
 };
 
 class myComparator
@@ -34,12 +35,13 @@ public:
 };
 
 
-minHeapNode * buildHuffmanTree(char characters[], int frequency[], int size)
+minHeapNode * buildHuffmanTree(map<char, int> & file)
 {
     priority_queue<minHeapNode *, vector<minHeapNode*>, myComparator> minHeap;
-    for (int i = 0; i < size; i++)
+    map<char, int> :: iterator it;
+    for (auto it : file)
     {
-        minHeap.push(new minHeapNode(characters[i], frequency[i]));
+        minHeap.push(new minHeapNode(it.first, it.second));
     }
     
     while (minHeap.size() != 1)
@@ -57,7 +59,7 @@ minHeapNode * buildHuffmanTree(char characters[], int frequency[], int size)
     return minHeap.top();
 }
 
-void getCodes(minHeapNode * root, string code, vector<pair<char, string>> * codes)
+void getCodes(minHeapNode * root, string code, map<char, string> & codes)
 {
     if(!root)
     {
@@ -65,30 +67,66 @@ void getCodes(minHeapNode * root, string code, vector<pair<char, string>> * code
     }
     if (root -> data != '$')
     {
-        codes -> push_back(make_pair(root -> data, code));
-        //        cout << root -> data << " : " << code << endl;
+        codes.insert({root -> data, code});
     }
     getCodes(root -> left, code + '0', codes);
     getCodes(root -> right, code + '1', codes);
-   
-    
 }
 
+string decode_file(minHeapNode * root, string code)
+{
+    string ans = "";
+    minHeapNode * curr = root;
+    for (int i = 0; i < code.size(); i++)
+    {
+        if (code[i] == '0')
+        {
+            curr = curr -> left;
+        }
+        else curr = curr -> right;
+        if (!curr -> left && !curr -> right)
+        {
+            ans += curr -> data;
+            curr = root;
+        }
+    }
+    return ans + '\0';
+}
 
 
 int main()
 {
-    char characters[] = {'a', 'b', 'c', 'd', 'e', 'f'};
-    int frequency[] = { 5, 9, 12, 13, 16, 45 };
-    
-    int size = sizeof(characters) / sizeof(characters[0]);
-    
-
-    minHeapNode * root = buildHuffmanTree(characters, frequency, size);
-    vector<pair<char, string>> * codes = new vector<pair<char, string>>;
-    getCodes(root, "", codes);
-    for (auto v : *codes)
+    string text = "aaabbbbbccccdddddeeeeeeeee"; // or input from any file!
+    map<char, int> file;
+    for (int i = 0; i < text.size(); i++)
     {
-        cout << v.first << " : " << v.second << endl;
+        if (file.count(text[i]) == 0)
+        {
+            file[text[i]] = 1;
+        }
+        else file[text[i]]++;
     }
+    for(auto it : file)
+    {
+        cout << it.first << ": " << it.second << endl;
+    }
+    minHeapNode * root = buildHuffmanTree(file);
+    map<char, string> codes;
+    getCodes(root, "", codes);
+    
+    for(auto it : codes)
+    {
+        cout << it.first << ": " << it.second << endl;
+    }
+    string encoded = "";
+    for (int i = 0; i < text.size(); i++)
+    {
+        encoded += codes.at(text[i]);
+    }
+    float size = float(encoded.size());
+    cout << "Average Length: " << 1.0 * size / text.size() << endl;
+    cout << "Encoded file : " << encoded << endl;
+    cout << "File Decoded : " << decode_file(root, encoded) << endl; // or writer << decoded_file << endl; 
+  
 }
+
