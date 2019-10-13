@@ -84,10 +84,6 @@ def decryption(key_56, cipher):
     return encrypted_bits
 
 
-# [0 1 1 1 0 0 1 0 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0 1 1 0 1
-#  0 0 1 0 1 1 1 0 1 0 0 0 1 1 1 0 0 1 1 0 1 1 1 0 0 1 1]
-# [0 1 1 1 0 0 1 0 0 1 1 0 0 0 0 1 0 1 1 1 0 1 0 1 0 1 1 0 1 1 1 0 0 1 1 0 1
-#  0 0 1 0 1 1 1 0 1 0 0 0 1 1 1 0 0 1 1 0 1 1 1 0 0 1 1]
 if __name__ == '__main__':
     key = [1 if random.randint(1, 3) == 2 else 0 for i in range(56)]
     print("KEY(56-bits): {}".format(key))
