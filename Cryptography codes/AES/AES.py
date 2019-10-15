@@ -7,9 +7,8 @@ import time
 def master_key_generation_routine():
     command_line_key = os.popen('openssl enc -aes-128-cbc -k secret -P -md sha1').readlines()
     command_line_key = command_line_key[1].lstrip('key=').rstrip('\n')
-    key_binary_string = bin(int(command_line_key, 16)).lstrip('0b')
-    if len(key_binary_string) is not 128:
-        key_binary_string = "".join(np.zeros(128 - len(key_binary_string)).astype(str)) + key_binary_string
+    key_binary_string = bin(int(command_line_key, 16)).lstrip('0b').zfill(128)
+    print(key_binary_string)
     return np.array(list(key_binary_string), dtype=int)
 
 
@@ -23,10 +22,8 @@ def round_key_generation_g_function(key_32, r_c_i):
                                                                                                                + 8].
                                                                                                       astype(str)), 2)
         hex_substitution = s_box[row_index][col_index]
-        left_array, right_array = np.array(list(bin(int(hex_substitution[0], 16)).lstrip('0b')), dtype=int), \
-                                  np.array(list(bin(int(hex_substitution[1], 16)).lstrip('0b')), dtype=int)
-        left_array, right_array = np.append(np.zeros(4 - len(left_array), dtype=int), left_array), \
-                                  np.append(np.zeros(4 - len(right_array), dtype=int), right_array)
+        left_array, right_array = np.array(list(bin(int(hex_substitution[0], 16)).lstrip('0b').zfill(4)), dtype=int), \
+                                  np.array(list(bin(int(hex_substitution[1], 16)).lstrip('0b').zfill(4)), dtype=int)
         temp_8 = np.append(left_array, right_array)
         if not index:
             temp_8 = (temp_8 + r_c_i) % 2
@@ -66,8 +63,8 @@ def substitution_layer(input_bits):
         row_index = int("".join(input_bits[8 * index:8 * index + 4].astype(str)), 2)
         col_index = int("".join(input_bits[8 * index + 4: 8 * index + 8].astype(str)), 2)
         a, b = s_box[row_index][col_index][0], s_box[row_index][col_index][1]
-        binary_a, binary_b = np.array(list(bin(int(a, 16)).lstrip('0b')), dtype=int), np.array(list(bin(int(b, 16)).
-                                                                                                    lstrip('0b')),
+        binary_a, binary_b = np.array(list(bin(int(a, 16)).lstrip('0b').zfill(4)), dtype=int), np.array(list(bin(int(b, 16)).
+                                                                                                    lstrip('0b').zfill(4)),
                                                                                                dtype=int)
         binary_a = np.append(np.zeros(4 - len(binary_a)), binary_a).astype(int)
         binary_b = np.append(np.zeros(4 - len(binary_b)), binary_b).astype(int)
@@ -82,7 +79,7 @@ def row_shift_layer(input_bits):
             reshaped_input_bits[index, :] = np.roll(reshaped_input_bits[index, :], -8 * index)
         return reshaped_input_bits.reshape((128,))
     except ValueError as error:
-        print("Size of the input is not 128 bits long, ERROR: {}".format(error))
+        print("Size of the input is not 128 bits long, ERROR: [{}]".format(error))
         return None
 
 
@@ -98,7 +95,7 @@ def col_shift_layer(input_bits):
             reshaped_input_bits[:, 8 * index: 8 * index + 8] = temp
         return reshaped_input_bits.reshape((128,))
     except ValueError as error:
-        print("Size of the input is not 128 bits long, ERROR: {}".format(error))
+        print("Size of the input is not 128 bits long, ERROR: [{}]".format(error))
         return None
 
 
@@ -108,7 +105,7 @@ def encryption(input_string: str):
     input_bits = np.array(bit_object.tolist(), dtype=int)
     print("Input bits: [{}]".format(",".join(input_bits.astype(str))))
     key_128 = master_key_generation_routine()
-    print("KEY: {}".format(",".join(key_128.astype(str))))
+    print("KEY: [{}]".format(",".join(key_128.astype(str))))
     print("KEY LENGTH: [{}]".format(len(key_128)))
     keys = round_key_generation(key_128)
     for index in range(10):
@@ -141,4 +138,4 @@ if __name__ == '__main__':
             char = chr(int("".join(encrypted_bits[8 * i:8 * i + 8].astype(str)), 2))
             ascii_string += char
         print("ASCII DECODING: [{}]".format(ascii_string))
-    print("TIME TAKEN: {} s".format(time.time() - start_time))
+    print("ENCRYPTION TIME: {}seconds".format(time.time() - start_time))
