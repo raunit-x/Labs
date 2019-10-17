@@ -45,7 +45,7 @@ def decrypt_string(encrypted_list):
 
 
 if __name__ == '__main__':
-    num_bits = input("Number of bits for the prime numbers: ")
+    num_bits = input("Number of bits for the prime numbers (at least 512 for security of the RSA scheme): ")
     p = generate_prime_number(num_bits)
     q = generate_prime_number(num_bits)
     print("Choosen primes:\np = [{}], q = [{}]".format(p, q))
