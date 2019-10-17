@@ -19,7 +19,7 @@ def fast_exponentiation(a, b, n):
 if __name__ == '__main__':
     num_bits = input("Enter the number of bits of the prime number to be generated(default=1024): ")
     p = generate_prime_number(prime_bit_length=num_bits)
-    alpha = random.randint(20, 50)
+    alpha = random.randint(2, p // 2 - 1)
     print("DOMAIN PARAMETERS:\nAlpha: {}\tP: {}".format(alpha, p))
     a, b = random.randint(2, p - 2), random.randint(2, p - 2)  # Always choose from the Cyclic group Z*(p) : [2, p - 2]
     public_key_A, public_key_B = fast_exponentiation(alpha, a, p), fast_exponentiation(alpha, b, p)
