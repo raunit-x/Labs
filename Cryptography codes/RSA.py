@@ -1,3 +1,13 @@
+import os
+import sys
+sys.setrecursionlimit(10**8)
+
+
+def generate_prime_number(prime_bit_length='512'):
+    command_line_key = os.popen('openssl prime -generate -bits ' + prime_bit_length).readlines()
+    return int(command_line_key[0].rstrip('\n'))
+
+
 def extended_gcd(a, b):
     if a == 0:
         return b, 0, 1
@@ -27,33 +37,37 @@ def fast_exponentiation(a, b, n):
 
 
 def encrypt_string(s):
-    return ''.join([chr(fast_exponentiation(ord(x), e, n)) for x in list(s)])
+    return [fast_exponentiation(ord(x), e, n) for x in list(s)]
 
 
-def decrypt_string(s):
-    return ''.join([chr(fast_exponentiation(ord(x), d, n)) for x in list(s)])
+def decrypt_string(encrypted_list):
+    return ''.join([chr(fast_exponentiation(x, d, n)) for x in encrypted_list])
 
 
-p = int(input('Enter prime p: '))
-q = int(input('Enter prime q: '))
-print("Choosen primes:\np = {}, q = {}".format(p, q))
-n = p * q
-print("n = p * q = {}".format(n))
-phi = (p - 1) * (q - 1)
-print("Euler's function (totient) [phi(n)]: {}".format(phi))
+if __name__ == '__main__':
+    num_bits = input("Number of bits for the prime numbers: ")
+    p = generate_prime_number(num_bits)
+    q = generate_prime_number(num_bits)
+    print("Choosen primes:\np = [{}], q = [{}]".format(p, q))
+    n = p * q
+    print("n = p * q = [{}]".format(n))
+    phi = (p - 1) * (q - 1)
+    print("Euler's totient function, phi(n): [{}]".format(phi))
 
-e = get_e(n)
-if e is None:
-    print("The entered numbers were not primes")
-    exit()
-print("e = {}".format(e))
-d = mod_inv(e, phi)
-print("Your public key is a pair of numbers (e = {}, n = {}).".format(e, n))
-print("Your private key is a pair of numbers (d = {}, n = {}).".format(d, n))
+    e = get_e(n)
+    if e is None:
+        print("The entered numbers were not primes")
+        exit()
+    print("e = [{}]".format(e))
+    d = mod_inv(e, phi)
+    print("Your public key is a pair of numbers (e = [{}], n = [{}]).".format(e, n))
+    print("Your private key is a pair of numbers (d = [{}], n = [{}]).".format(d, n))
 
-s = input("\nEnter a message to encrypt: ")
-print("Plain message: {}".format(s))
-enc = encrypt_string(s)
-print("\nEncrypted message: {}".format(enc))
-dec = decrypt_string(enc)
-print("Decrypted message: {}".format(dec))
+    s = input("\nEnter a message to encrypt: ")
+    print("Plain message: [{}]".format(s))
+    encrypted_block = encrypt_string(s)
+    bit_string = "".join([bin(x).lstrip('0b').zfill(8) for x in encrypted_block])
+    encrypted_string = "".join([chr(int(x, 2)) for x in [bit_string[i:i + 8] for i in range(0, len(bit_string), 8)]])
+    print("\nEncrypted message: [{}]".format(encrypted_string))
+    dec = decrypt_string(encrypted_block)
+    print("Decrypted message: [{}]".format(dec))
