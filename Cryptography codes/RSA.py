@@ -36,7 +36,7 @@ def fast_exponentiation(a, b, n):
     return ((temp * temp) % n * a) % n if b & 1 else (temp * temp) % n
 
 
-def encrypt_string(s):
+def encryption(s):
     return [fast_exponentiation(ord(x), e, n) for x in list(s)]
 
 
@@ -45,7 +45,7 @@ def decrypt_string(encrypted_list):
 
 
 if __name__ == '__main__':
-    num_bits = input("Number of bits for the prime numbers (at least 512 for security of the RSA scheme): ")
+    num_bits = input("Number of bits for the prime numbers: ")
     p = generate_prime_number(num_bits)
     q = generate_prime_number(num_bits)
     print("Choosen primes:\np = [{}], q = [{}]".format(p, q))
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     s = input("\nEnter a message to encrypt: ")
     print("Plain message: [{}]".format(s))
-    encrypted_block = encrypt_string(s)
+    encrypted_block = encryption(s)
     bit_string = "".join([bin(x).lstrip('0b').zfill(8) for x in encrypted_block])
     encrypted_string = "".join([chr(int(x, 2)) for x in [bit_string[i:i + 8] for i in range(0, len(bit_string), 8)]])
     print("\nEncrypted message: [{}]".format(encrypted_string))
