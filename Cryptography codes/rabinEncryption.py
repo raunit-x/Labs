@@ -76,3 +76,5 @@ if __name__ == '__main__':
     print("ENCRYPTED MESSAGE: {}".format(cipher))
     print("PRIVATE KEYS:\np = [{}], q = [{}]".format(private_p, private_q))
     print("DECRYPTED MESSAGE: {}".format(decryption(public_n, private_p, private_q, cipher, dictionary)))
+
+ 
