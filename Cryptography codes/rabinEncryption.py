@@ -61,11 +61,12 @@ def decryption(n, p, q, cipher_num, text_dictionary):
     gcd, c, d = extended_gcd(p, q)
     x = (r * d * q + s * c * p) % n
     y = (r * d * q - s * c * p) % n
-    candidate_decryptions = [x, n - x, y, n - y]
+    candidate_decrypted_messages = [x, n - x, y, n - y]
+    print("FOUR CANDIDATE DECRYPTED NUMBERS: {}".format(candidate_decrypted_messages))
     for key, value in zip(text_dictionary, text_dictionary.values()):
-        if candidate_decryptions.count(value):
+        if candidate_decrypted_messages.count(value):
             return key
-    return candidate_decryptions
+    return candidate_decrypted_messages
 
 
 if __name__ == '__main__':
@@ -75,4 +76,3 @@ if __name__ == '__main__':
     print("ENCRYPTED MESSAGE: {}".format(cipher))
     print("PRIVATE KEYS:\np = [{}], q = [{}]".format(private_p, private_q))
     print("DECRYPTED MESSAGE: {}".format(decryption(public_n, private_p, private_q, cipher, dictionary)))
-
