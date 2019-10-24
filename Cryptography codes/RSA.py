@@ -24,7 +24,7 @@ def mod_inv(a, m):
 
 def get_e(a):
     for i in range(2, phi):
-        if extended_gcd(i, phi)[0] == 1:  # gcd(e, phi(n)) == 1 and Ε ring Z(phi) = {1, 2, ... phi(n) - 1}
+        if extended_gcd(i, phi)[0] == 1:  # gcd(e, phi(n)) == 1 and e Ε ring Z(phi) = {1, 2, ... phi(n) - 1}
             return i
     return None
 
