@@ -23,8 +23,8 @@ def mod_inv(a, m):
 
 
 def get_e(a):
-    for i in range(2, a):
-        if extended_gcd(i, a)[0] == 1 and mod_inv(i, phi) is not None:
+    for i in range(2, phi):
+        if extended_gcd(i, phi)[0] == 1:  # gcd(e, phi(n)) == 1 and Ε ring Z(phi) = {1, 2, ... phi(n) - 1}
             return i
     return None
 
@@ -48,12 +48,11 @@ if __name__ == '__main__':
     num_bits = input("Number of bits for the prime numbers: ")
     p = generate_prime_number(num_bits)
     q = generate_prime_number(num_bits)
-    print("Choosen primes:\np = [{}], q = [{}]".format(p, q))
+    print("Chosen primes:\np = [{}], q = [{}]".format(p, q))
     n = p * q
     print("n = p * q = [{}]".format(n))
     phi = (p - 1) * (q - 1)
-    print("Euler's totient function, phi(n): [{}]".format(phi))
-
+    print("Euler's Totient function, phi(n): [{}]".format(phi))
     e = get_e(n)
     if e is None:
         print("The entered numbers were not primes")
