@@ -27,6 +27,8 @@ def mod_inv(a, m):
 
 
 def generate_prime_numbers(num_bits='1024'):
+    if int(num_bits) < 1024:
+        num_bits = '1024'
     return int(os.popen('openssl prime -generate -bits ' + num_bits).readlines()[0].rstrip('\n'))
 
 
