@@ -34,7 +34,6 @@ if __name__ == '__main__':
         range_table[it[0]] = [low, low + it[1]]
         low += it[1]
     print(encoding(range_table, "german"))
-    print(decoding(range_table, 0.41735))
 
 
 
