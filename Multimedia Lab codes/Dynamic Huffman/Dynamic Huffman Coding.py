@@ -88,7 +88,6 @@ class DynamicHuffmanTree:
         if root.left is None and root.right is None:
             self.index = len(self.encoding)
             self.decoded_text += root.char
-            print("LEAF: {}".format(root.char))
             return
         next_node = root.left if self.encoding[curr_index] is '0' else root.right
         self.decode(next_node, curr_index + 1)
