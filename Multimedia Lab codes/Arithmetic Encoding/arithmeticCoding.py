@@ -1,6 +1,7 @@
 import string
 import decimal
 from decimal import Decimal
+import sys
 
 
 def get_attributes():
@@ -75,16 +76,18 @@ def decode(encoded, str_len, every):
 
 
 def main():
-    encode_str = "inputs"
-    decimal.getcontext().prec = 2 * len(encode_str)
+    encode_str = "thisissomesampletextwhichisgoingtogetcompressedalot"
+    decimal.getcontext().prec = 100
     str_len = len(encode_str)
     every = 3
     encoded = encode(encode_str, every)
     print("INPUT STRING: {}".format(encode_str))
-    print("ENCODING OF '{}' WITH PRECISION {} (2 * len(input_string)): {}".format(encode_str, decimal.getcontext().prec,
+    print("ENCODING OF '{}' WITH PRECISION ({}): {}".format(encode_str, decimal.getcontext().prec,
                                                                                encoded))
     decoded = decode(encoded, str_len, every)
     print("DECODED STRING: {}".format(decoded))
+    old_size, new_size = 8 * len(encode_str), sys.getsizeof(encoded)
+    print("COMPRESSION RATIO: {}%".format(((old_size - new_size) / old_size) * 100))
 
 
 if __name__ == '__main__':
