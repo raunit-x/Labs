@@ -80,9 +80,11 @@ def main():
     str_len = len(encode_str)
     every = 3
     encoded = encode(encode_str, every)
-    print("ENCODED: {}".format(encoded))
+    print("INPUT STRING: {}".format(encode_str))
+    print("ENCODING OF '{}' WITH PRECISION {} (2 * len(input_string)): {}".format(encode_str, decimal.getcontext().prec,
+                                                                               encoded))
     decoded = decode(encoded, str_len, every)
-    print("DECODED: {}".format(decoded))
+    print("DECODED STRING: {}".format(decoded))
 
 
 if __name__ == '__main__':
