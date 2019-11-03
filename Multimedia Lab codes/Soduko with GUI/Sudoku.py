@@ -205,7 +205,7 @@ def is_valid(bo, num, pos):
     return True
 
 
-def redraw_window(win, board, time, strikes):
+def redraw_window(win, board, time):
     win.fill((255, 255, 255))
     fnt = pygame.font.SysFont("comicsans", 40)
     text = fnt.render("Time: " + format_time(time), 1, (0, 0, 0))
@@ -218,18 +218,17 @@ def redraw_window(win, board, time, strikes):
 def format_time(secs):
     sec = secs % 60
     minute = secs // 60
-    hour = minute // 60
     mat = " " + str(minute) + ":" + str(sec)
     return mat
 
 
 def main():
-    win = pygame.display.set_mode((540,600))
+    win = pygame.display.set_mode((540, 600))
     pygame.display.set_caption("Sudoku")
     board = Grid(9, 9, 540, 540, win)
     key = None
     run = True
-    start = time.time()
+    start, play_time = time.time(), time.time()
     strikes = 0
     is_finished = False
     while run:
@@ -290,7 +289,7 @@ def main():
         if board.selected and key is not None:
             board.sketch(key)
 
-        redraw_window(win, board, play_time, strikes)
+        redraw_window(win, board, play_time)
         pygame.display.update()
 
 
