@@ -27,7 +27,7 @@ def mod_inv(a, m):
 def init():
     a = [random.randint(1, 5)]
     for i in range(400):
-        a.append(sum(a) + random.randint(1, 3))
+        a.append(a[-1] + random.randint(1, 3))
     return a[200:]
 
 
