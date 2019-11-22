@@ -1,6 +1,4 @@
-import heapq
-
-
+# Q.4 Write a Program for text compression using Dynamic Huffman Coding.
 class HuffmanNode:
     def __init__(self, char, freq, left=None, right=None):
         self.char, self.freq, self.left, self.right = char, freq, left, right
@@ -115,7 +113,6 @@ class DynamicHuffmanTree:
             return None
         if root.left.freq > root.right.freq:
             root.left, root.right = root.right, root.left
-            return root
         self.balance_tree(root.right)
         self.balance_tree(root.left)
         return root
@@ -143,19 +140,17 @@ class DynamicHuffmanTree:
         print("Encoded till now(SENDER): {}".format(self.encoding))
         print("Decoded till now(RECEIVER): {}".format(self.decoded_text))
         self.root = self.update_tree_helper(char, self.root, flag)
-        self.characters[char] = self.characters.get(char, 0) + 1
         self.root = self.balance_tree(self.root)
+        self.characters[char] = self.characters.get(char, 0) + 1
         print("TREE(after insertion of the character '{}'):".format(char))
         print_tree(self.root)
 
 
 if __name__ == '__main__':
-    text = ['a', 'a', 'r', 'd', 'v', 'a', 'r', 'k']
+    text = list('aardvark')
     tree = DynamicHuffmanTree()
     for c in text:
         tree.update_tree(c)
     print("FINAL ENCODING(SENDER): {}".format(tree.encoding))
     print("FINAL DECODING(RECEIVER): {}".format(tree.decoded_text))
-    print("COMPRESSION RATIO: {}%".format((((len(text) * 8) - len(tree.encoding)) / (len(text) * 8)) * 100))
-
-
+    print("COMPRESSION RATIO: {}".format((8 * len(text)) / len(tree.encoding)))
