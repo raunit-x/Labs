@@ -1,6 +1,7 @@
 # Q.9 Write a script to send/receive an e-mail using SMTP protocol.
 import smtplib
 from email.message import EmailMessage
+from RSA import *  # RSA.py is a self-written encryption/decryption script.
 import imghdr
 
 password = 'í!ÃmÎ#Só}ß¬F§ç³ãSó½¤38Àa'  # Password encrypted using RSA
